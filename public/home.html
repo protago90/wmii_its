@@ -1,0 +1,22 @@
+<h3>Interaktywne technologie sieciowe <span class="label label-primary">2021z</span></h3>
+
+<div ng-if="!ctrl.session.login">
+    <form class="form form-inline">
+
+        <input class="form-control" type="text" ng-model="ctrl.credentials.login" ng-change="ctrl.error = ''" placeholder="login"/>
+        <input class="form-control" type="password" ng-model="ctrl.credentials.password" ng-change="ctrl.error = ''" placeholder="hasło"/>
+
+        <button class="form-control btn btn-success fa fa-sign-in" ng-click="ctrl.login()" ng-disabled="!ctrl.credentials.login"></button>
+
+    </form>
+</div>
+
+<div ng-if="ctrl.session.login">
+    <form class="form form-inline">
+
+        <h1><span ng-bind="ctrl.session.login"></span></h1>
+
+        <button class="form-control btn btn-danger fa fa-sign-out" ng-click="ctrl.logout()"></button>
+
+    </form>
+</div>

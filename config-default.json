@@ -1,0 +1,8 @@
+{
+    "frontend_dir": "./public",
+    "cache": 0,
+    "port": 8888,
+    "dbUrl": "mongodb://localhost:27017",
+    "dbName": "its2021z",
+    "collation": "pl"
+}

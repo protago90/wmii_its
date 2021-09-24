@@ -1,0 +1,85 @@
+<div ng-if="ctrl.session.role == 2">
+    <div>
+        <div nowrap style="float: left">
+            <form class="form-inline">
+                <button class="form-control btn btn-default fa fa-caret-left" ng-click="ctrl.prevPage()" ng-disabled="ctrl.skip - ctrl.pageLimit < 0"></button>
+                <button class="form-control btn btn-default fa fa-caret-right" ng-click="ctrl.nextPage()" ng-disabled="ctrl.skip + ctrl.pageLimit >= ctrl.data.filtered"></button>
+                <span class="label label-default">
+                    strona
+                    <span ng-bind="ctrl.skip / ctrl.pageLimit + 1"></span>
+                    z
+                    <span ng-bind="(ctrl.data.filtered / ctrl.pageLimit + 0.49) | number: 0"></span>
+                </span>                        
+                &nbsp;
+                <span class="label label-success">
+                    wszystkich
+                    <span ng-bind="ctrl.data.total"></span>
+                </span>
+                <span class="label label-warning">
+                    przefiltrowanych
+                    <span ng-bind="ctrl.data.filtered"></span>
+                </span>
+                <span class="label label-danger">
+                    wyświetlonych
+                    <span ng-bind="ctrl.data.records.length"></span>
+                </span>
+            </form>
+        </div>
+
+        <div nowrap style="float: right">
+            <form class="form-inline">
+                <span class="fa fa-search"></span>
+                <input class="form-control" ng-model="ctrl.search" ng-change="ctrl.searchChanged()"/>
+            </form>
+        </div>
+    </div>
+
+    <br/><br/>
+
+    <table class="table table-hover">
+        <tr ng-click="ctrl.selected = -1">
+            <th>
+                <form class="form-inline">
+                    <button class="form-control btn btn-sm btn-default fa fa-sort-up" ng-click="ctrl.sort('NA')" ng-disabled="ctrl.order == 'NA'"></button>
+                    <button class="form-control btn btn-sm btn-default fa fa-sort-down" ng-click="ctrl.sort('ND')" ng-disabled="ctrl.order == 'ND'"></button>
+                    Nazwa
+                </form>
+            </th>
+            <th>
+                <form class="form-inline">
+                    <button class="form-control btn btn-sm btn-default fa fa-sort-up" ng-click="ctrl.sort('VA')"  ng-disabled="ctrl.order == 'VA'"></button>
+                    <button class="form-control btn btn-sm btn-default fa fa-sort-down" ng-click="ctrl.sort('VD')" ng-disabled="ctrl.order == 'VD'"></button>
+                    Wartość
+                </form>
+            </th>
+            <th>&nbsp;</th>
+        </tr>
+        <tr ng-repeat="element in ctrl.data.records" ng-click="ctrl.select($index)" ng-class="{ 'rowSelected': ctrl.selected == $index }">
+            <td ng-bind="element.name"></td>
+            <td ng-bind="element.value"></td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>
+                <input class="form-control" type="text" ng-model="ctrl.record.name" placeholder="nazwa"/>
+            </td>
+            <td>
+                <input class="form-control" type="number" ng-model="ctrl.record.value" placeholder="wartość"/>
+            </td>
+            <td nowrap>
+                <form class="form-inline">
+                    <button class="form-control btn btn-success fa fa-plus" ng-click="ctrl.create()" ng-if="ctrl.selected < 0" ng-disabled="!ctrl.record.name || !ctrl.record.value"></button>
+                    <button class="form-control btn btn-success fa fa-check" ng-click="ctrl.update()" ng-if="ctrl.selected >= 0" ng-disabled="!ctrl.record.name || !ctrl.record.value"></button>
+                    &nbsp;
+                    <button class="form-control btn btn-default fa fa-times" ng-click="ctrl.cancel()"></button>
+                    &nbsp;
+                    <button class="form-control btn btn-danger fa fa-trash" ng-click="ctrl.delete()" ng-disabled="ctrl.selected < 0"></button>
+                </form>
+            </td>
+        </tr>    
+    </table>
+</div>
+
+<div class="alert alert-danger" ng-if="ctrl.session.role != 2">
+    Brak dostępu do danych
+</div>

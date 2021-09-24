@@ -1,0 +1,26 @@
+{
+  "name": "its2021z",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/mariusz.jarocki/its2021z.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/mariusz.jarocki/its2021z/issues"
+  },
+  "homepage": "https://gitlab.com/mariusz.jarocki/its2021z#readme",
+  "dependencies": {
+    "cookies": "^0.8.0",
+    "mongodb": "^3.6.6",
+    "node-static": "^0.7.11",
+    "uuid": "^8.3.2"
+  }
+}
