@@ -13,10 +13,14 @@ app.controller('Projects', [ '$http', function($http) {
     ctrl.record = {}
     ctrl.selected = -1
     let clearRecord = function() {
-        ctrl.record.shortName = ''
+        ctrl.record.project = ''
         ctrl.record.name = ''
     }
     clearRecord()
+
+    // relacje
+    ctrl.projects_used = []
+    ctrl.projects_pool = []
 
     // filtrowanie
     ctrl.search = ''
@@ -28,7 +32,7 @@ app.controller('Projects', [ '$http', function($http) {
         $http.post('/project', ctrl.record).then(
             function(res) {
                 ctrl.getAllData()
-                ctrl.clearRecord()
+                clearRecord()
             }, function(err) {}
         )
     }
@@ -44,15 +48,53 @@ app.controller('Projects', [ '$http', function($http) {
         )
     }
 
+    ctrl.getProjectData = function() {
+        $http.get('/project').then(
+            function(res) {
+                let records = res.data.records
+                for(let id in records) ctrl.projects_pool.push( records[id].project )
+            },
+            function(err) {}
+        )
+    }
+
+    ctrl.getRelationalData = function() {
+        $http.get('/task').then(
+            function(res) {
+                let records = res.data.records
+                for(let id in records) ctrl.projects_used.push( records[id].project )
+            },
+            function(err) {}
+        )
+        $http.get('/person').then(
+            function(res) {
+                let records = res.data.records
+                for(let id in records) ctrl.projects_used.push( records[id].project )
+            },
+            function(err) {}
+        )
+    }
+
+    ctrl.assertProject = function() {
+
+        return ctrl.projects_pool.includes(ctrl.record.project)
+    }
+
+    ctrl.assertUsedProject = function() {
+        return ctrl.projects_used.includes(ctrl.record.project)
+    }
+
     ctrl.searchChanged = function() {
         ctrl.skip = 0
         ctrl.getAllData()
     }
 
     ctrl.getAllData()
+    ctrl.getProjectData()
+    ctrl.getRelationalData()
 
     ctrl.select = function(index) {
-        ctrl.record.shortName = ctrl.data.records[index].shortName
+        ctrl.record.project = ctrl.data.records[index].project
         ctrl.record.name = ctrl.data.records[index].name
         ctrl.selected = index
     }

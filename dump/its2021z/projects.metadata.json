@@ -1,1 +1,1 @@
-{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"},{"v":{"$numberInt":"2"},"unique":true,"key":{"shortName":{"$numberInt":"1"}},"name":"shortName","background":false}],"uuid":"54c341c7bf304c1ea07ff72ef7a5748d","collectionName":"projects"}
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"}],"uuid":"db1018485088441eb261a7b4889aabb8","collectionName":"projects","type":"collection"}

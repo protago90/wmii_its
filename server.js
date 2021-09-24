@@ -105,7 +105,11 @@ httpServer.on('request', function(req, res) {
                     return
 
                 case '/project':
-                    dbrest.handle(env, db.projects, { searchFields: [ 'shortName', 'name' ], order: { shortName: 1 } })
+                    dbrest.handle(env, db.projects, { searchFields: [ 'project', 'name' ], order: { name: 1 } })
+                    return
+
+                case '/task':
+                    dbrest.handle(env, db.tasks, { searchFields: [ 'project', 'name' ], order: { name: 1 } })
                     return
 
                 // serwowanie statycznej treści

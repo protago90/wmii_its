@@ -1,0 +1,16 @@
+version: '3.7'
+services:
+  mongo:
+    image: mongo:latest
+    ports: 
+      - 27017:27017
+
+  dump:
+    image: mongo:latest
+    volumes: 
+      - /home/mg/TMP/wmii_its/dump:/dump
+    links: 
+      - mongo:mongo
+    command: mongorestore --host mongo:27017
+
+# https://davejansen.com/how-to-dump-restore-a-mongodb-database-from-a-docker-container/
