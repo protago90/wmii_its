@@ -59,7 +59,7 @@
             </th>
             <th>
                 <form class="form-inline">
-                    Lidera
+                    Lider
                 </form>
             </th>
             <th>&nbsp;</th>
@@ -82,7 +82,7 @@
                 <input class="form-control" type="number" ng-model="ctrl.record.value" placeholder="wartość"/>
             </td>
             <td>
-                <select multiple="" class="form-control" type="array" ng-model="ctrl.record.project" placeholder="projekt">
+                <select multiple class="form-control" type="array" ng-model="ctrl.record.project">
                     <option value="" hidden>...</option>
                     <option ng-repeat="p in ctrl.projects_pool" ng-value="p">{{p}}</option>
                 </select>
