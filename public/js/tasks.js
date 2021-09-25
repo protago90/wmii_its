@@ -68,14 +68,18 @@ app.controller('Tasks', [ '$http', function($http) {
         $http.get('/person').then(
             function(res) {
                 let records = res.data.records
-                for(let i in ctrl.projects_pool) {
-                    ctrl.persons_related[ctrl.projects_pool[i]] = []
-                }
+                // for(let i in ctrl.projects_pool) {
+                //     ctrl.persons_related[ctrl.projects_pool[i]] = []
+                // }
                 for(let i in records) {
                     let projects = records[i].project
                     let person = records[i].name
                     if(projects) {
-                        for(let i_p in projects) ctrl.persons_related[projects[i_p]].push( person )      
+                        for(let i_p in projects) {
+                            let project = projects[i_p]
+                            if(!ctrl.persons_related[project]) ctrl.persons_related[project] = []
+                            ctrl.persons_related[project].push( person )   
+                        }   
                     }
                 }
                 ctrl.persons_related[''] = []
