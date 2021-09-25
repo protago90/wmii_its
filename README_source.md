@@ -8,7 +8,7 @@ Na zaliczenie: Zadania rozszerzające projekt
 
 * (na 5) osoba może być przypisana do wielu projektów naraz; każde zadanie ma grupę osób realizujących a każdy projekt ma szefa (jedną z osób); zachowane są więzy integralności w bazie tj. wiązania są wykonywane przez klucze główne; proponowane rozwiązanie to nowa kolekcja, PersonsTasks złożona z _id, person_id i task_id oraz dodatkowe pole w kolekcji Projects, manager_id; frontend powinien umożliwić wszystkie typowe operacje na tych wiązaniach (dodanie/usunięcie osoby do zadania, ustawienie szefa projektu), przy czym nie ma obowiązku realizji tego na istniejących widokach).
 
-Zadania dla studentów po kursie Programowanie Aplikacji Internetowych
+Zadania dla studentów po kursie Programowanie Aplikacji Internetowych 
 
 * import danych publicznych do lokalnej bazy danych
 

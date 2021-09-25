@@ -20,7 +20,7 @@ app.controller('Tasks', [ '$http', function($http) {
     clearRecord()
 
     // relacja
-    ctrl.projects_pool = []
+    ctrl.projects_pool = ['']
 
     // filtrowanie
     ctrl.search = ''
@@ -35,6 +35,10 @@ app.controller('Tasks', [ '$http', function($http) {
                 clearRecord()
             }, function(err) {}
         )
+    }
+
+    let clearForm = function() {
+        clearRecord()
     }
 
     ctrl.getAllData = function() {
@@ -58,7 +62,7 @@ app.controller('Tasks', [ '$http', function($http) {
         )
     }
 
-    ctrl.assertProject = function() {
+    ctrl.isProject = function() {
         return ctrl.projects_pool.includes(ctrl.record.project)
     }
 
@@ -69,17 +73,12 @@ app.controller('Tasks', [ '$http', function($http) {
 
     ctrl.getAllData()
     ctrl.getProjectData()
-    ctrl.assertProject()
 
     ctrl.select = function(index) {
         ctrl.record.name = ctrl.data.records[index].name
         ctrl.record.project = ctrl.data.records[index].project
         ctrl.record.date = new Date(ctrl.data.records[index].date)
         ctrl.selected = index
-    }
-
-    let clearForm = function() {
-        clearRecord()
     }
 
     ctrl.update = function() {

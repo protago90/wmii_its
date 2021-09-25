@@ -63,12 +63,12 @@
         </td>
         <td nowrap>
             <form class="form-inline">
-                <button class="form-control btn btn-success fa fa-plus" ng-click="ctrl.create()" ng-if="ctrl.selected < 0" ng-disabled="!ctrl.record.project || !ctrl.record.name || ctrl.assertProject()"></button>
-                <button class="form-control btn btn-success fa fa-check" ng-click="ctrl.update()" ng-if="ctrl.selected >= 0" ng-disabled="!ctrl.record.project || !ctrl.record.name || ctrl.assertProject()"></button>
+                <button class="form-control btn btn-success fa fa-plus" ng-click="ctrl.create()" ng-if="ctrl.selected < 0" ng-disabled="!ctrl.record.project || !ctrl.record.name || ctrl.isProject()"></button>
+                <button class="form-control btn btn-success fa fa-check" ng-click="ctrl.update()" ng-if="ctrl.selected >= 0" ng-disabled="!ctrl.record.project || !ctrl.record.name || ctrl.isProjectUsed()"></button>
                 &nbsp;
                 <button class="form-control btn btn-default fa fa-times" ng-click="ctrl.cancel()"></button>
                 &nbsp;
-                <button class="form-control btn btn-danger fa fa-trash" ng-click="ctrl.delete()" ng-disabled="ctrl.selected < 0 || ctrl.assertUsedProject()"></button>
+                <button class="form-control btn btn-danger fa fa-trash" ng-click="ctrl.delete()" ng-disabled="ctrl.selected < 0 || ctrl.isProjectUsed()"></button>
             </form>
         </td>
     </tr>    

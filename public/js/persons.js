@@ -22,7 +22,7 @@ app.controller('Persons', [ '$http', 'common', function($http, common) {
     clearRecord()
 
     // relacje
-    ctrl.projects_pool = []
+    ctrl.projects_pool = ['']
 
     // filtrowanie
     ctrl.search = ''
@@ -40,6 +40,10 @@ app.controller('Persons', [ '$http', 'common', function($http, common) {
                 common.alert.type = 'alert-success'            
             }, function(err) {}
         )
+    }
+
+    let clearForm = function() {
+        clearRecord()
     }
 
     ctrl.getAllData = function() {
@@ -63,11 +67,6 @@ app.controller('Persons', [ '$http', 'common', function($http, common) {
         )
     }
 
-    ctrl.assertProject = function() {
-        if(ctrl.record.project == '') return true
-        return ctrl.projects_pool.includes(ctrl.record.project)
-    }
-
     ctrl.searchChanged = function() {
         ctrl.skip = 0
         ctrl.getAllData()
@@ -81,10 +80,6 @@ app.controller('Persons', [ '$http', 'common', function($http, common) {
         ctrl.record.project = ctrl.data.records[index].project
         ctrl.record.value = ctrl.data.records[index].value
         ctrl.selected = index
-    }
-
-    let clearForm = function() {
-        clearRecord()
     }
 
     ctrl.update = function() {

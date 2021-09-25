@@ -13,6 +13,7 @@ app.controller('Projects', [ '$http', function($http) {
     ctrl.record = {}
     ctrl.selected = -1
     let clearRecord = function() {
+        ctrl.record.project_src = ''
         ctrl.record.project = ''
         ctrl.record.name = ''
     }
@@ -35,6 +36,10 @@ app.controller('Projects', [ '$http', function($http) {
                 clearRecord()
             }, function(err) {}
         )
+    }
+
+    let clearForm = function() {
+        clearRecord()
     }
 
     ctrl.getAllData = function() {
@@ -75,13 +80,12 @@ app.controller('Projects', [ '$http', function($http) {
         )
     }
 
-    ctrl.assertProject = function() {
-
+    ctrl.isProject = function() {
         return ctrl.projects_pool.includes(ctrl.record.project)
     }
 
-    ctrl.assertUsedProject = function() {
-        return ctrl.projects_used.includes(ctrl.record.project)
+    ctrl.isProjectUsed = function() {
+        return ctrl.projects_used.includes(ctrl.record.project_src)
     }
 
     ctrl.searchChanged = function() {
@@ -94,13 +98,11 @@ app.controller('Projects', [ '$http', function($http) {
     ctrl.getRelationalData()
 
     ctrl.select = function(index) {
+        ctrl.record.project_src = ctrl.data.records[index].project
         ctrl.record.project = ctrl.data.records[index].project
+        console.log()
         ctrl.record.name = ctrl.data.records[index].name
         ctrl.selected = index
-    }
-
-    let clearForm = function() {
-        clearRecord()
     }
 
     ctrl.update = function() {
