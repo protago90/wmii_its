@@ -21,6 +21,7 @@ app.controller('Tasks', [ '$http', function($http) {
 
     // relacja
     ctrl.projects_pool = ['']
+    ctrl.persons_related = {}
 
     // filtrowanie
     ctrl.search = ''
@@ -57,6 +58,27 @@ app.controller('Tasks', [ '$http', function($http) {
             function(res) {
                 let records = res.data.records
                 for(let id in records) ctrl.projects_pool.push( records[id].project )
+                ctrl.projects_pool = [...new Set(ctrl.projects_pool) ]
+            },
+            function(err) {}
+        )
+    }
+
+    ctrl.getRelatedPersonData = function() {
+        $http.get('/person').then(
+            function(res) {
+                let records = res.data.records
+                for(let i in ctrl.projects_pool) {
+                    ctrl.persons_related[ctrl.projects_pool[i]] = []
+                }
+                for(let i in records) {
+                    let projects = records[i].project
+                    let person = records[i].name
+                    if(projects) {
+                        for(let i_p in projects) ctrl.persons_related[projects[i_p]].push( person )      
+                    }
+                }
+                ctrl.persons_related[''] = []
             },
             function(err) {}
         )
@@ -73,6 +95,7 @@ app.controller('Tasks', [ '$http', function($http) {
 
     ctrl.getAllData()
     ctrl.getProjectData()
+    ctrl.getRelatedPersonData()
 
     ctrl.select = function(index) {
         ctrl.record.name = ctrl.data.records[index].name

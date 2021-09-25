@@ -14,15 +14,20 @@ app.controller('Persons', [ '$http', 'common', function($http, common) {
     // edycja
     ctrl.record = {}
     ctrl.selected = -1
+    ctrl.tmp_selected_val = ''
     let clearRecord = function() {
+        ctrl.tmp_selected_val = ''
         ctrl.record.name = ''
-        ctrl.record.project = ''
+        ctrl.record.projects = []
         ctrl.record.value = 0
     }
     clearRecord()
 
     // relacje
+    ctrl.persons_pool = ['']
+    ctrl.persons_used = ['']
     ctrl.projects_pool = ['']
+    ctrl.projects_related = {}
 
     // filtrowanie
     ctrl.search = ''
@@ -57,11 +62,53 @@ app.controller('Persons', [ '$http', 'common', function($http, common) {
         )
     }
 
+    ctrl.getPersonData = function() {
+        $http.get('/person').then(
+            function(res) {
+                let records = res.data.records
+                for(let id in records) ctrl.persons_pool.push( records[id].name)
+                ctrl.persons_pool = [...new Set(ctrl.persons_pool) ]
+            },
+            function(err) {}
+        )
+    }
+
     ctrl.getProjectData = function() {
         $http.get('/project').then(
             function(res) {
                 let records = res.data.records
                 for(let id in records) ctrl.projects_pool.push( records[id].project )
+                ctrl.projects_pool = [...new Set(ctrl.projects_pool) ]
+            },
+            function(err) {}
+        )
+    }
+
+    ctrl.getUsedPersonData = function() {
+        $http.get('/project').then(
+            function(res) {
+                let records = res.data.records
+                for(let id in records) ctrl.persons_used.push( records[id].lead)
+                ctrl.persons_used = [...new Set(ctrl.persons_used) ]
+            },
+            function(err) {}
+        )
+    }
+
+    ctrl.getRelatedProjectData = function() {
+        $http.get('/project').then(
+            function(res) {
+                let records = res.data.records
+                for(let i in ctrl.persons_pool) {
+                    ctrl.projects_related[ctrl.persons_pool[i]] = []
+                }
+                for(let i in records) {
+                    let project = records[i].project
+                    let person = records[i].lead
+                    if(project) {
+                        ctrl.projects_related[person].push( project )      
+                    }
+                }
             },
             function(err) {}
         )
@@ -72,12 +119,27 @@ app.controller('Persons', [ '$http', 'common', function($http, common) {
         ctrl.getAllData()
     }
 
+    ctrl.isPerson = function() {
+        return ctrl.persons_pool.includes(ctrl.record.name)
+    }
+
+    ctrl.isPersonUsed = function() {
+        return ctrl.persons_used.includes(ctrl.tmp_selected_val)
+    }
+
+    ctrl.isPersonFixable = function() {
+        return ctrl.isPersonUsed() && ctrl.tmp_selected_val != ctrl.record.name
+    }
+
     ctrl.getAllData()
+    ctrl.getPersonData()
     ctrl.getProjectData()
+    ctrl.getUsedPersonData()
+    ctrl.getRelatedProjectData()
 
     ctrl.select = function(index) {
+        ctrl.tmp_selected_val = ctrl.data.records[index].name
         ctrl.record.name = ctrl.data.records[index].name
-        ctrl.record.project = ctrl.data.records[index].project
         ctrl.record.value = ctrl.data.records[index].value
         ctrl.selected = index
     }
@@ -90,7 +152,7 @@ app.controller('Persons', [ '$http', 'common', function($http, common) {
                 ctrl.getAllData()
                 clearForm()
                 common.alert.text = 'Dane zmienione'
-                common.alert.type = 'alert-success'          ``  
+                common.alert.type = 'alert-success'
             }, function(err) {}
         )
     }

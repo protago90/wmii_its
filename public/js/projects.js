@@ -12,16 +12,21 @@ app.controller('Projects', [ '$http', function($http) {
     // edycja
     ctrl.record = {}
     ctrl.selected = -1
+    ctrl.tmp_selected_val = ''
     let clearRecord = function() {
-        ctrl.record.project_src = ''
+        ctrl.tmp_project_src = ''
         ctrl.record.project = ''
         ctrl.record.name = ''
+        ctrl.record.lead = ''
     }
     clearRecord()
 
     // relacje
-    ctrl.projects_used = []
-    ctrl.projects_pool = []
+    ctrl.projects_used = ['']
+    ctrl.projects_pool = ['']
+    ctrl.persons_pool = ['']
+    ctrl.tasks_pool = ['']
+    ctrl.tasks_related = {}
 
     // filtrowanie
     ctrl.search = ''
@@ -63,18 +68,50 @@ app.controller('Projects', [ '$http', function($http) {
         )
     }
 
-    ctrl.getRelationalData = function() {
+    ctrl.getPersonData = function() {
+        $http.get('/person').then(
+            function(res) {
+                let records = res.data.records
+                for(let id in records) ctrl.persons_pool.push( records[id].name )
+                ctrl.persons_pool = [...new Set(ctrl.persons_pool) ]
+            },
+            function(err) {}
+        )
+    }
+
+    ctrl.getUsedProjectsData = function() {
         $http.get('/task').then(
             function(res) {
                 let records = res.data.records
                 for(let id in records) ctrl.projects_used.push( records[id].project )
+                ctrl.projects_used = [...new Set(ctrl.projects_used) ]
             },
             function(err) {}
         )
         $http.get('/person').then(
             function(res) {
                 let records = res.data.records
-                for(let id in records) ctrl.projects_used.push( records[id].project )
+                for(let id in records) ctrl.projects_used.push.apply(ctrl.projects_used, records[id].project )
+                ctrl.projects_used = [...new Set(ctrl.projects_used) ]
+            },
+            function(err) {}
+        )
+    }
+
+    ctrl.getRelatedTaskData = function() {
+        $http.get('/task').then(
+            function(res) {
+                let records = res.data.records
+                for(let i in ctrl.projects_pool) {
+                    ctrl.tasks_related[ctrl.projects_pool[i]] = []
+                }
+                for(let i in records) {
+                    let project = records[i].project
+                    let task = records[i].name
+                    if(project) {
+                        ctrl.tasks_related[project].push( task )      
+                    }
+                }
             },
             function(err) {}
         )
@@ -85,7 +122,11 @@ app.controller('Projects', [ '$http', function($http) {
     }
 
     ctrl.isProjectUsed = function() {
-        return ctrl.projects_used.includes(ctrl.record.project_src)
+        return ctrl.projects_used.includes(ctrl.tmp_selected_val)
+    }
+
+    ctrl.isProjectFixable = function() {
+        return ctrl.isProjectUsed() && ctrl.tmp_selected_val != ctrl.record.project
     }
 
     ctrl.searchChanged = function() {
@@ -95,13 +136,15 @@ app.controller('Projects', [ '$http', function($http) {
 
     ctrl.getAllData()
     ctrl.getProjectData()
-    ctrl.getRelationalData()
+    ctrl.getPersonData()
+    ctrl.getUsedProjectsData()
+    ctrl.getRelatedTaskData()
 
     ctrl.select = function(index) {
-        ctrl.record.project_src = ctrl.data.records[index].project
+        ctrl.tmp_selected_val = ctrl.data.records[index].project
         ctrl.record.project = ctrl.data.records[index].project
-        console.log()
         ctrl.record.name = ctrl.data.records[index].name
+        ctrl.record.lead = ctrl.data.records[index].lead
         ctrl.selected = index
     }
 

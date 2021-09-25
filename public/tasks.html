@@ -52,12 +52,18 @@
                 Termin
             </form>
         </th>
+        <th>
+            <form class="form-inline">
+                Osoby
+            </form>
+        </th>
         <th>&nbsp;</th>
     </tr>
     <tr ng-repeat="element in ctrl.data.records" ng-click="ctrl.select($index)" ng-class="{ 'rowSelected': ctrl.selected == $index }">
         <td ng-bind="element.name"></td>
         <td ng-bind="element.project"></td>
         <td ng-bind="element.date"></td>
+        <td ng-bind="ctrl.persons_related[element.project].join(' ')"></td>
         <td>&nbsp;</td>
     </tr>
     <tr>
@@ -80,11 +86,13 @@
         <td>
             <select class="form-control" type="text" ng-model="ctrl.record.project" placeholder="projekt">
                 <option value="" hidden>...</option>
-                <option ng-repeat="p in ctrl.projects_pool" ng-value="p">{{p}}</option>
+                <option ng-repeat="v in ctrl.projects_pool" ng-value="v">{{v}}</option>
             </select>
         </td>
         <td>
             <input class="form-control" type="date" data-date-format="YYYY/MM/DD" ng-model="ctrl.record.date" placeholder="termin"/>
+        </td>
+        <td>
         </td>
         <td nowrap>
             <form class="form-inline">
